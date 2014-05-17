@@ -31,7 +31,7 @@ device.on('data', function(data) {
   var cvRx = new CV96(data);
   var id = cvRx.getId()
 
-  //console.log(id);
+  // console.log(id);
 
   //cvTx.setData(0, sdjksdjk);
   cvTx.setId(id);
@@ -39,7 +39,7 @@ device.on('data', function(data) {
 });
 
 
-ada.on('data', setValue)
+//ada.on('data', setValue)
 ada1.on('data', setValue)
 ada2.on('data', setValue)
 ada3.on('data', setValue)
@@ -48,19 +48,83 @@ ada5.on('data', setValue)
 ada6.on('data', setValue)
 ada7.on('data', setValue)
 
-ada.read();
+//ada.read();
 ada1.read();
 ada2.read();
 ada3.read();
 ada4.read();
 ada5.read();
 ada6.read();
-ada7.read();
+//ada7.read();
+
+
+
+var counter = 0;
+function Drummer()
+{
+  counter++;
+  if (counter == 4) {
+    counter = 0;
+  }
+
+  if (counter == 0) {
+    setValue(0, 1023);
+    // setTimeout(function(){
+    //   setValue(0, 0);
+    // }, 20);
+  } else {
+    setValue(0, 0);
+  }
+
+  if (counter == 0 || counter == 2) {
+    setValue(7, 1023);
+    // setTimeout(function(){
+    //   setValue(7, 0);
+    // }, 20);
+  } else {
+    setValue(7, 0);
+  }
+
+  setTimeout(Drummer, 120);
+
+}
+
+setTimeout(Drummer, 120);
+
+//
+// var high = true;
+// setInterval(function() {
+//   if (high) {
+//     setValue(0, 1000);
+//     // console.log('high');
+//     high = false;
+//   } else {
+//     setValue(0, 10);
+//     high = true;
+//     // console.log('low');
+//   }
+// }, 250);
+//
+//
+// var highhat = true;
+// setInterval(function() {
+//   if (highhat) {
+//     setValue(7, 1000);
+//     // console.log('high');
+//     highhat = false;
+//   } else {
+//     setValue(7, 10);
+//     highhat = true;
+//     // console.log('low');
+//   }
+// }, 250/2);
+
+
 
 function setValue(channel, cvData) {
   //console.log(channel, cvData);
   cvTx.setValue(channel, cvData);
-  cvTx.setValue(channel + 8, cvData);
+  // cvTx.setValue(channel + 8, cvData);
 }
 
 

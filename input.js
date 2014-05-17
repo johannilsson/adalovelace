@@ -30,8 +30,9 @@ var runEase = function(from, to, millisec, each, callback, ease, startTime){
   }
 };
 
-var scale = function(value, istart, istop, ostart, ostop) {
-  return ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
+var scale = function(value, istart, istop, ostart, ostop, scaling) {
+  var value = ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
+  return (value/scaling)*scaling;
 };
 
 // console.log(Smooth);
@@ -41,13 +42,16 @@ var scale = function(value, istart, istop, ostart, ostop) {
 // console.log(s(1.5));        // => 2.5
 
 util.inherits(Binary, events.EventEmitter);
-function Binary(channel, dataFile) {
+function Binary(channel, dataFile, delay, scaling, interpolation) {
   events.EventEmitter.call(this);
   this.channel = channel;
 
   this.data = fs.readFileSync(dataFile);
   this.counter = 0;
   this.dataLength = this.data.length;
+  this.delay = delay;
+  this.scaling = scaling;
+  this.interpolation = interpolation || false;
 }
 
 Binary.prototype.read = function() {
@@ -64,17 +68,27 @@ Binary.prototype.read = function() {
   var channel = this.channel;
   var self = this;
 
-  runEase(this.data[this.counter], this.data[nextCounter], 200, function(newPos){
-    var value = parseInt(scale(newPos, 0, 255, 0, 1023));
-    self.emit('data', self.channel, value);
-  }, function(){
-    self.read();
-  });
+  if (this.interpolation) {
+    runEase(this.data[this.counter], this.data[nextCounter], this.delay, function(newPos){
+      var value = parseInt(scale(newPos, 0, 255, 0, 1023, self.scaling));
+      self.emit('data', self.channel, value);
+    }, function(){
+      self.read();
+    });
+
+  } else {
+      var value = parseInt(scale(this.data[this.counter], 0, 255, 0, 1023, self.scaling));
+      self.emit('data', self.channel, value);
+      setTimeout(function(){
+        self.read();
+      }, this.delay);
+  }
+
 };
 
 Binary.prototype.run = function() {
 
-  
+
 }
 
 

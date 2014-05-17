@@ -4,6 +4,32 @@ var Smooth = require('./Smooth').Smooth;
 fs = require('fs');
 
 
+
+var runEase = function(from, to, millisec, each, callback, ease, startTime){
+  if (!startTime) startTime = new Date().getTime();
+  if (!ease) ease = 'lin';
+
+  var cTime = new Date().getTime();
+
+  var part = (cTime - startTime) / millisec;
+
+  if (part > 1) {
+    part = 1;
+  }
+
+  // console.log(from, to);
+
+  var newPos = from - ((from - to) *  part);
+
+  each(newPos, part);
+
+  if (part < 1) {
+    setTimeout(function(){runEase(from, to, millisec, each, callback, ease, startTime);}, 10);
+  } else {
+    if (callback) callback();
+  }
+};
+
 var scale = function(value, istart, istop, ostart, ostop) {
   return ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
 };
@@ -22,8 +48,6 @@ function Binary(channel, dataFile) {
   this.data = fs.readFileSync(dataFile);
   this.counter = 0;
   this.dataLength = this.data.length;
-
-  //this.read.bind(this);
 }
 
 Binary.prototype.read = function() {
@@ -32,15 +56,20 @@ Binary.prototype.read = function() {
     this.counter = 0;
   }
 
-  var value = parseInt(scale(this.data[this.counter], 0, 255, 0, 1023));
-  this.emit('data', this.channel, value);
+  var nextCounter = this.counter+1;
+  if (nextCounter >= this.dataLength) {
+    nextCounter = 0;
+  }
 
-
-
+  var channel = this.channel;
   var self = this;
-  setTimeout(function() {
+
+  runEase(this.data[this.counter], this.data[nextCounter], 200, function(newPos){
+    var value = parseInt(scale(newPos, 0, 255, 0, 1023));
+    self.emit('data', self.channel, value);
+  }, function(){
     self.read();
-  }, 20);
+  });
 };
 
 Binary.prototype.run = function() {

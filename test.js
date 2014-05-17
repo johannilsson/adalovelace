@@ -20,7 +20,7 @@ ada.on('data', setValue)
 ada2.on('data', setValue)
 
 ada.read();
-ada2.read();
+// ada2.read();
 
 function setValue(channel, cvData) {
   console.log(channel, cvData);

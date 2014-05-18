@@ -1,7 +1,7 @@
 
 # MIDI Hack
 
-![ADA](ada3.jpg "ADA")
+![ADA](setup.jpg "ADA")
 
 Our project is a tribute to Ada Lovelave, credited with being the first computer programmer
 

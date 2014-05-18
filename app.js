@@ -10,22 +10,22 @@ var devices = HID.devices()
 
 console.log(devices);
 
-// 1 Bas, kick Drum
+// 1 Bas, kick Drum, not used here
 var ada = new Binary(0, 'ada-rgb.raw', 250, 1);
 // 2 filter
-var ada1 = new Binary(1, 'ada-grey.raw', 250, 16);
+var ada1 = new Binary(1, 'ada-grey.raw', 250, 16, true);
 // 3 melody, pitch
 //var ada2 = new Binary(2, 'ada.raw', (250 / 2) * 3, 40, false);
-var ada2 = new Binary(2, 'ada.raw', 100, 40, false);
+var ada2 = new Binary(2, 'ada.raw', 250, 40, false);
 // 4 Hihat filter
 var ada3 = new Binary(3, 'ada2-grey.raw', 250, 1);
-// 5 control
-var ada4 = new Binary(4, 'ada2-rgb.raw', 100);
-// 6
-var ada5 = new Binary(5, 'ada.jpg', 100);
+// 5 piano, melody
+var ada4 = new Binary(4, 'ada2-rgb.raw', 250, 16, false);
+// 6 filter drum
+var ada5 = new Binary(5, 'ada-grey.raw', (250 / 2) * 3, 40, false);
 // 7
-var ada6 = new Binary(6, 'ada.jpg', 100);
-// 8 Drum OK
+var ada6 = new Binary(6, 'ada.raw', 100);
+// 8 Drum OK, not used here
 var ada7 = new Binary(7, 'ada.jpg', 100);
 
 
@@ -62,7 +62,7 @@ ada2.read();
 ada3.read();
 ada4.read();
 ada5.read();
-ada6.read();
+//ada6.read();
 //ada7.read();
 
 
@@ -77,24 +77,25 @@ function Drummer()
 
   if (counter == 0) {
     setValue(0, 1023);
-    // setTimeout(function(){
-    //   setValue(0, 0);
-    // }, 20);
   } else {
     setValue(0, 0);
   }
 
   if (counter == 0 || counter == 2) {
     setValue(7, 1023);
-    // setTimeout(function(){
-    //   setValue(7, 0);
-    // }, 20);
   } else {
     setValue(7, 0);
   }
 
-  setTimeout(Drummer, 120);
+  //
+  if (counter == 1 || counter == 3) {
+    setValue(6, 1023);
+  } else {
+    setValue(6, 0);
+  }
 
+
+  setTimeout(Drummer, 120);
 }
 
 setTimeout(Drummer, 120);
@@ -134,8 +135,3 @@ function setValue(channel, cvData) {
   cvTx.setValue(channel, cvData);
   // cvTx.setValue(channel + 8, cvData);
 }
-
-
-// ada.on('data', function(data) {
-//   cvTx.setValue(ada.channel, data);
-// });

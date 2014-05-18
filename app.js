@@ -10,14 +10,22 @@ var devices = HID.devices()
 
 console.log(devices);
 
-
-var ada = new Binary(0, 'ada.jpg', 250, 1);
-var ada1 = new Binary(1, 'ada2.jpg', 250, 16);
-var ada2 = new Binary(2, 'ada3.jpg', (250 / 2) * 3, 40, true);
-var ada3 = new Binary(3, 'ada.jpg', 400);
-var ada4 = new Binary(4, 'ada.jpg', 100);
+// 1 Bas, kick Drum
+var ada = new Binary(0, 'ada-rgb.raw', 250, 1);
+// 2 filter
+var ada1 = new Binary(1, 'ada-grey.raw', 250, 16);
+// 3 melody, pitch
+//var ada2 = new Binary(2, 'ada.raw', (250 / 2) * 3, 40, false);
+var ada2 = new Binary(2, 'ada.raw', 100, 40, false);
+// 4 Hihat filter
+var ada3 = new Binary(3, 'ada2-grey.raw', 250, 1);
+// 5 control
+var ada4 = new Binary(4, 'ada2-rgb.raw', 100);
+// 6
 var ada5 = new Binary(5, 'ada.jpg', 100);
+// 7
 var ada6 = new Binary(6, 'ada.jpg', 100);
+// 8 Drum OK
 var ada7 = new Binary(7, 'ada.jpg', 100);
 
 

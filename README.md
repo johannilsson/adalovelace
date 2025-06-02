@@ -16,7 +16,11 @@ Team Members
 * Andrey Zhukov
 * Johan Nilsson
 
---
+---
+
+Watch the recorded demo, https://www.youtube.com/watch?v=_Ls9B8dvadk&t=508s
+
+---
 
 With a team from different disciplines – musicians, hackers, & electronic engineers – we plan to explore what happens with the expression when analog human input converts to digital data and then back to analog control signals.
 
